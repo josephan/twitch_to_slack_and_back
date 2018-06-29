@@ -8,9 +8,8 @@ defmodule TwitchSlack.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
-      # Starts a worker by calling: TwitchSlack.Worker.start_link(arg)
+      Slack.Bot.start_link(SlackServer, [], Application.get_env(:twitch_slack, :slack_api_token))
       {TwitchServer, []}
-      # {TwitchSlack.Worker, arg},
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

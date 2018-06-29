@@ -33,6 +33,16 @@ defmodule TwitchServer do
     # ExIRC.Client.msg(client, :privmsg, "#ranked_fun", message)
   # end
 
+  # Callbacks
+
+  def init([config]) do
+    {:ok, client}  = ExIrc.start_link!()
+    ExIrc.Client.add_handler client, self()
+    ExIrc.Client.connect! client, config.server, config.port
+
+    {:ok, %Config{config | :client => client}}
+  end
+
   def handle_info({:connected, _server, _port}, config) do
     ExIrc.Client.logon config.client, config.pass, config.nick, config.nick, config.nick
     {:noreply, config}
@@ -70,15 +80,5 @@ defmodule TwitchServer do
 
   defp build_message(username, message) do
     "#{username}: #{message}"
-  end
-
-  # Callbacks
-
-  def init([config]) do
-    {:ok, client}  = ExIrc.start_link!()
-    ExIrc.Client.add_handler client, self()
-    ExIrc.Client.connect! client, config.server, config.port
-
-    {:ok, %Config{config | :client => client}}
   end
 end
