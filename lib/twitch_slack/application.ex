@@ -9,6 +9,7 @@ defmodule TwitchSlack.Application do
     # List all child processes to be supervised
     children = [
       # Starts a worker by calling: TwitchSlack.Worker.start_link(arg)
+      {TwitchServer, []}
       # {TwitchSlack.Worker, arg},
     ]
 
