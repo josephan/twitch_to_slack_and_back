@@ -3,13 +3,9 @@
 use Mix.Config
 
 config :twitch_slack,
-  twitch_client_id: System.get_env("TWITCH_CLIENT_ID"),
-  twitch_client_secret: System.get_env("TWITCH_CLIENT_SECRET"),
   twitch_chat_oauth: System.get_env("TWITCH_CHAT_OAUTH"),
   slack_channel_id: System.get_env("SLACK_CHANNEL_ID"),
-  slack_api_token: System.get_env("SLACK_API_TOKEN"),
-  slack_oauth_token: System.get_env("SLACK_OAUTH_TOKEN"),
-  slack_channel_id: System.get_env("SLACK_CHANNEL_ID")
+  slack_oauth_token: System.get_env("SLACK_OAUTH_TOKEN")
 
 config :slack,
   api_token: System.get_env("SLACK_API_TOKEN")
