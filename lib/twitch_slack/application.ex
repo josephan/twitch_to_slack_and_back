@@ -8,7 +8,10 @@ defmodule TwitchSlack.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
-      Slack.Bot.start_link(SlackServer, [], Application.get_env(:twitch_slack, :slack_api_token))
+      %{
+        id: Slack.Bot,
+        start: {Slack.Bot, :start_link, [SlackServer, [], Application.get_env(:twitch_slack, :slack_oauth_token), %{name: SlackServer}]}
+      },
       {TwitchServer, []}
     ]
 

@@ -1,6 +1,5 @@
 defmodule TwitchServer do
   use GenServer
-  require Logger
 
   defmodule Config do
     defstruct server:  "irc.chat.twitch.tv",
@@ -27,11 +26,10 @@ defmodule TwitchServer do
     GenServer.start_link(__MODULE__, [%Config{}], name: __MODULE__)
   end
 
-  # def send_to_slack(username, message) do
-    # client = :sys.get_state(__MODULE__) |> Map.get(:client)
-    # message = build_message(username, message)
-    # ExIRC.Client.msg(client, :privmsg, "#ranked_fun", message)
-  # end
+  def broadcast(message) do
+    client = :sys.get_state(__MODULE__) |> Map.get(:client)
+    ExIrc.Client.msg(client, :privmsg, "#ranked_fun", message)
+  end
 
   # Callbacks
 
@@ -66,15 +64,11 @@ defmodule TwitchServer do
 
   def handle_info({:received, message, %{user: user}, _channel}, config) do
     message = build_message(user, message)
-    IO.puts("TWITCH CHAT MESSAGE =============")
-    IO.puts(message)
-    IO.puts("=================================")
+    SlackServer.broadcast(message)
     {:noreply, config}
   end
 
-  def handle_info(msg, state) do
-    IO.puts("UNKNOWN MSG")
-    IO.inspect msg
+  def handle_info(_msg, state) do
     {:noreply, state}
   end
 
